@@ -1,31 +1,37 @@
 /**
  * Guess The Number Game
- * TODO: Get user value from input and save it to variable numberGuess
- * TODO: Generate a random number 1 to 100 and save it to variable correctNumber
- * TODO: Console whether the guess is too high, too low, or is correct inside playGame function
- * TODO: Create a function called displayResult to move the logic for if the guess is too high, too low, or correct
- * TODO: Complete the showYouWon, showNumberAbove, showNumberBelow
- * TODO: Use the showYouWon... functions within displayResult to display the correct dialog
- * TODO: Save the guess history in a variable called guess
- * TODO: Display the guess history using displayHistory() function
- * TODO: Use the initGame() function to restart the game
+ * Done: Get user value from input and save it to variable numberGuess
+ * Done: Generate a random number 1 to 100 and save it to variable correctNumber
+ * Done: Console whether the guess is too high, too low, or is correct inside playGame function
+ * Done: Create a function called displayResult to move the logic for if the guess is too high, too low, or correct
+ * Done: Complete the showYouWon, showNumberAbove, showNumberBelow
+ * Done: Use the showYouWon... functions within displayResult to display the correct dialog
+ * Done: Save the guess history in a variable called guess
+ * Done: Display the guess history using displayHistory() function
+ * Done: Use the initGame() function to restart the game
  */
 
 // Variable to store the list of guesses 
-
+let guesses = [];
 // Variable for store the correct random number 
-
+let correctNumber = getRandomNumber();
 
 window.onload = function() {
     document.getElementById("number-submit").addEventListener("click", playGame);
     document.getElementById("restart-game").addEventListener("click", initGame)
-}
+};
 
 /**
  * Functionality for playing the whole game
  */
 function playGame(){
   // *CODE GOES BELOW HERE *
+  let numberGuess = document.getElementById('number-guess').value;
+  // pass values to function for result logic
+  displayResult(numberGuess, correctNumber);
+  // save guess
+  saveGuessHistory(numberGuess);
+  displayHistory();
 }
 
 /**
@@ -33,7 +39,18 @@ function playGame(){
  * HINT: Use if, else if, else statement 
  */
 // *CODE GOES BELOW HERE *
-
+function displayResult(userGuess, correctNum){
+  // convert to Number
+  userGuess = Number(userGuess);
+  // compare user guess against the random number
+  if(userGuess > correctNum ){
+    showNumberAbove();
+  }else if(userGuess < correctNum) {
+    showNumberBelow();
+  }else{
+    showYouWon();
+  };
+};
 
 
 /**
@@ -42,6 +59,11 @@ function playGame(){
  */
 function initGame(){
   // *CODE GOES BELOW HERE *
+  correctNumber = getRandomNumber();
+  guesses = [];
+  resetResultContent();
+  document.getElementById("history").innerHTML = '';
+  document.getElementById('number-guess').value ='';
 }
 
 /**
@@ -57,6 +79,7 @@ function resetResultContent(){
  */
 function getRandomNumber(){
   // *CODE GOES BELOW HERE *
+  return Math.floor(Math.random() * 100) + 1 ;
 }
 
 /**
@@ -66,6 +89,7 @@ function getRandomNumber(){
  */
 function saveGuessHistory(guess) {
   // *CODE GOES BELOW HERE *
+  guesses.push(guess);
 }
 
 /**
@@ -77,15 +101,17 @@ function saveGuessHistory(guess) {
  * HINT: use while loop and string concatentation to create a list of guesses
  */
 function displayHistory() {
-  let index; // TODO
+  let index = guesses.length -1; // last position in the array
   let list = "<ul class='list-group'>";
   // *CODE GOES BELOW HERE *
+  while (index >= 0) {
+    list +=  "<li class='list-group-item'>" +
+    'You guessed ' + guesses[index] + "</li>";
+    index -= 1;
+  }
   list += '</ul>'
   document.getElementById("history").innerHTML = list;
 }
-
-
-
 /**
  * Retrieve the dialog based on if the guess is wrong or correct 
  */
@@ -112,7 +138,7 @@ function showYouWon(){
    * HINT: Use the 'won' and text parameters 
    */
   // *CODE GOES BELOW HERE *
-
+  let dialog = getDialog('won', text);
   document.getElementById("result").innerHTML = dialog;
 }
 
@@ -124,7 +150,7 @@ function showNumberAbove(){
    * HINT: Use the 'warning' and text parameters 
    */
   // *CODE GOES BELOW HERE *
-
+  let dialog = getDialog('warning', text);
   document.getElementById("result").innerHTML = dialog;
 }
 
@@ -136,6 +162,6 @@ function showNumberBelow(){
    * HINT: Use the 'warning' and text parameters 
    */
   // *CODE GOES BELOW HERE *
-
+  let dialog = getDialog('warning', text);
   document.getElementById("result").innerHTML = dialog;
 }
